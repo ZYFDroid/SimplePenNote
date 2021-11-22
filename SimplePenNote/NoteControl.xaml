@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="SimplePenNote.NoteControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SimplePenNote"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Initialized="UserControl_Initialized" Loaded="UserControl_Loaded">
+    <Grid x:Name="sizeAccessor" x:FieldModifier="public" Background="#fff" SizeChanged="Grid_SizeChanged">
+
+
+        <InkCanvas x:Name="canv" Width="2048" Height="2048" StylusOutOfRange="canv_StylusOutOfRange" StylusInRange="canv_StylusInRange" StylusSystemGesture="canv_StylusSystemGesture" TouchDown="canv_TouchDown" TouchMove="canv_TouchMove" TouchUp="canv_TouchUp" StylusButtonDown="canv_StylusButtonDown" StylusButtonUp="canv_StylusButtonUp" StylusDown="canv_StylusDown" StylusUp="canv_StylusUp" StrokeCollected="canv_StrokeCollected" StrokeErased="canv_StrokeErased" SelectionMoved="canv_SelectionMoved" SelectionResized="canv_SelectionResized" >
+            <InkCanvas.Background>
+                <ImageBrush ImageSource="/noteline.png" Viewport="0,0,1,0.025" TileMode="Tile" Opacity="0.7"/>
+            </InkCanvas.Background>
+
+
+        </InkCanvas>
+
+    </Grid>
+</UserControl>
