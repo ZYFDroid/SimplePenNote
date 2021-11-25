@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.IO;
@@ -15,9 +14,6 @@ namespace PdfBuildTest
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine(Adler32CheckSum.CheckSum(File.ReadAllBytes("testchksum.dat")));
-            //Console.ReadLine();
-            //if (true) { return; }
             string teststr = "爷成功了"; ;
             Font f = new Font(SystemFonts.DefaultFont.FontFamily, 144);
             Brush black = new SolidBrush(Color.Black);
@@ -65,6 +61,7 @@ namespace PdfBuildTest
                     entryBuilder.BuildImagePages(this, img, width, height);
                 }
             }
+            //需要分别创建然后分别添加，创建这两个对象需要已经创建的对象的数量
             PdfEntry entryXref = entryBuilder.buildXrefEntry(this);
             PdfEntry entryEnd = entryBuilder.buildTailerEntry(this);
             AddEntry(entryXref);
@@ -74,6 +71,10 @@ namespace PdfBuildTest
         
         public void WriteToFile(string path)
         {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
             using(FileStream fs = File.OpenWrite(path))
             {
                 for (int i = 0; i < xrefTable.Count; i++)
@@ -97,6 +98,7 @@ namespace PdfBuildTest
         /// 当页面较多的时候可以先写出文件，然后释放内存，仅保留必要的数据结构
         /// </summary>
         public void WriteAndRelease() {
+            //Do it later
             throw new NotImplementedException();
         }
 
@@ -107,6 +109,7 @@ namespace PdfBuildTest
     }
 
     public class PdfEntryBuilder {
+        //Object id increment
         public int PdfEntryCounter = 1;
 
         public PdfEntryBuilder() { 
@@ -127,8 +130,8 @@ namespace PdfBuildTest
         public PdfEntry buildSimpleObject(byte[] followingData)
         {
             using (MemoryStream ms = new MemoryStream()) {
-                byte[] beginobj = Encoding.ASCII.GetBytes(PdfEntryCounter + " 0 obj\n");
-                byte[] endobj = Encoding.ASCII.GetBytes("\nendobj\n\n");
+                byte[] beginobj = (PdfEntryCounter + " 0 obj\n").Ascii();
+                byte[] endobj = "\nendobj\n\n".Ascii();
                 ms.Write(beginobj,0,beginobj.Length);
                 ms.Write(followingData,0,followingData.Length);
                 ms.Write(endobj,0,endobj.Length);
@@ -152,14 +155,14 @@ namespace PdfBuildTest
                 offset += builder.xrefTable[i].Length;
             }
             sb.Append("\n");
-            return new PdfEntry(Encoding.ASCII.GetBytes(sb.ToString()));
+            return new PdfEntry(sb.ToString().Ascii());
         }
 
         public PdfEntry buildTailerEntry(PDFBuilder builder)
         {
             int xrefCount = builder.xrefTable.Count;
             string strs = "trailer\n<</Size " + xrefCount + "/Root 1 0 R>>\nstartxref\n" + builder.xrefTable.Sum(x => x.Length) + "\n%%EOF\n";
-            return new PdfEntry(Encoding.ASCII.GetBytes(strs));
+            return new PdfEntry(strs.Ascii());
         }
 
         public void buildPageCountEntry(PDFBuilder builder,int pageCount) {
@@ -176,8 +179,8 @@ namespace PdfBuildTest
             }
             pageObj.Append("]>>");
             PdfEntry objPageObj = buildSimpleObject(pageObj.ToString().Ascii());
-            builder.xrefTable.Add(refPageObj);
-            builder.xrefTable.Add(objPageObj);
+            builder.AddEntry(refPageObj);
+            builder.AddEntry(objPageObj);
         }
 
         public PdfEntry BuildImageEntry(Image img,int width,int height) { 
@@ -220,22 +223,17 @@ namespace PdfBuildTest
         int imgCounter = 0;
         public void BuildImagePages(PDFBuilder builder,Image img,int width,int height)
         {
-            builder.xrefTable.Add(BuildImageEntry(img, width, height));
+            builder.AddEntry(BuildImageEntry(img, width, height));
             int imgRefId = PdfEntryCounter - 1;
             PdfEntry refImageObj = buildSimpleObject(("<</XObject<</Im"+imgCounter+" "+imgRefId+" 0 R>>>>").Ascii());
-            builder.xrefTable.Add(refImageObj);
+            builder.AddEntry(refImageObj);
             PdfEntry propImageObj = buildStreamObj(("q "+width+" 0 0 "+height+" 0 0 cm /Im"+imgCounter+" Do Q\n").Ascii());
-            builder.xrefTable.Add(propImageObj);
+            builder.AddEntry(propImageObj);
             PdfEntry pageObj = buildSimpleObject($"<</Type/Page/MediaBox[0 0 {width} {height}]/Rotate 0/Resources {PdfEntryCounter - 2} 0 R/Contents {PdfEntryCounter - 1} 0 R/Parent 2 0 R>>".Ascii());
-            builder.xrefTable.Add(pageObj);
+            builder.AddEntry(pageObj);
             imgCounter++;
         }
-
-
-        
     }
-
-
     static class StringExtension {
         public static byte[] Ascii(this string str) {
             return Encoding.ASCII.GetBytes(str);
@@ -256,71 +254,26 @@ namespace PdfBuildTest
                 using (MemoryStream msbefore = new MemoryStream(memoryBitmap))
                 using (MemoryStream msafter = new MemoryStream())
                 {
-
-                    msafter.WriteByte(0x78);
-                    msafter.WriteByte(0x9c);
+                    //Wrap RawDeflate with zlib header and checksum
+                    byte[] zlibHeader = {0x78,0x9c};
+                    msafter.Write(zlibHeader,0,zlibHeader.Length);
                     using (DeflateStream deflate = new DeflateStream(msafter, CompressionMode.Compress, true))
                     {
                         msbefore.CopyTo(deflate);
-                        
                     }
                     msafter.WriteByte((byte)(checksum >> 0 & 0xff));
                     msafter.WriteByte((byte)(checksum >> 8 & 0xff));
                     msafter.WriteByte((byte)(checksum >> 16 & 0xff));
                     msafter.WriteByte((byte)(checksum >> 24 & 0xff));
-                    return msafter.GetBuffer();
+                    return msafter.ToArray();
                 }
             }
         }
     }
-    /*
-      The following C code computes the Adler-32 checksum of a data buffer.
-   It is written for clarity, not for speed.  The sample code is in the
-   ANSI C programming language. Non C users may find it easier to read
-   with these hints:
-
-      &      Bitwise AND operator.
-      >>     Bitwise right shift operator. When applied to an
-             unsigned quantity, as here, right shift inserts zero bit(s)
-             at the left.
-      <<     Bitwise left shift operator. Left shift inserts zero
-             bit(s) at the right.
-      ++     "n++" increments the variable n.
-      %      modulo operator: a % b is the remainder of a divided by b.
-
-      #define BASE 65521 // largest prime smaller than 65536 
-
     
-       Update a running Adler-32 checksum with the bytes buf[0..len-1]
-     and return the updated checksum. The Adler-32 checksum should be
-     initialized to 1.
-
-     Usage example:
-
-       unsigned long adler = 1L;
-
-       while (read_buffer(buffer, length) != EOF) {
-         adler = update_adler32(adler, buffer, length);
-       }
-       if (adler != original_adler) error();
-    
-    unsigned long update_adler32(unsigned long adler,
-       unsigned char* buf, int len)
-    {
-        unsigned long s1 = adler & 0xffff;
-        unsigned long s2 = (adler >> 16) & 0xffff;
-        int n;
-
-        for (n = 0; n < len; n++)
-        {
-            s1 = (s1 + buf[n]) % BASE;
-            s2 = (s2 + s1) % BASE;
-        }
-        return (s2 << 16) + s1;
-    }
-
-       Return the adler32 of the bytes buf[0..len-1] 
-     */
+    /// <summary>
+    /// Alder32 Checksum Algorithm based on RFC-1955
+    /// </summary>
     public class Adler32CheckSum {
 
         const uint BASE = 65521;
