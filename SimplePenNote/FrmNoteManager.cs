@@ -20,32 +20,46 @@ namespace SimplePenNote
             InitializeComponent();
             Program.WorkingDir = null;
             this.Icon = Program.windowIcon;
+            
         }
 
         Toast Toast;
-
+        float scaleFactor = 1.0f;
         private void FrmNoteManager_Load(object sender, EventArgs e)
         {
+            scaleFactor = (float)btnOpen.Width / 252f;
+            NoteIcon = new Bitmap(NoteIcon, scaleSize(72), scaleSize(72));
+            Image bannerTop = Properties.Resources.banner;
+            Image bannerBottom = Properties.Resources.banner_bottom;
+            panelTop.BackgroundImage = new Bitmap(bannerTop, (int)Math.Round((float)bannerTop.Width * ((float)panelTop.Height / (float)bannerTop.Height)), panelTop.Height);
+            panelBottom.BackgroundImage = new Bitmap(bannerBottom, (int)Math.Round((float)bannerBottom.Width * ((float)panelBottom.Height / (float)bannerBottom.Height)), panelBottom.Height);
             Toast = new Toast(this);
             loadData();
         }
 
-        private string savesPath = "saves";
+        private int scaleSize(int i)
+        {
+            return (int)Math.Floor(scaleFactor * i);
+        }
 
+
+
+        private string savesPath = "saves";
+        private Image NoteIcon = Properties.Resources.noteicon;
         private Button generateButton(String path,NoteInfoEntry noteInfoEntry)
         {
             Button btn = new Button();
             btn.BackColor = Color.White;
             btn.FlatAppearance.BorderColor = Color.White;
-            btn.FlatAppearance.BorderSize = 3;
+            btn.FlatAppearance.BorderSize = scaleSize(3);
             btn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver;
             btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(192,255,255);
             btn.FlatStyle = FlatStyle.Flat;
-            btn.Font = new Font(this.Font.FontFamily,12);
-            btn.Image = Properties.Resources.noteicon;
+            btn.Font = new Font(this.Font.FontFamily,(12));
+            btn.Image = NoteIcon;
             btn.ImageAlign = ContentAlignment.MiddleLeft;
-            btn.Margin = new Padding(20,1,0,0);
-            btn.Size = new Size(560, 89);
+            btn.Margin = new Padding(scaleSize(20),1,0,0);
+            btn.Size = new Size(scaleSize(560), scaleSize(89));
             DateTime d = DateTime.FromFileTime(noteInfoEntry.LastAccess);
             btn.Text = $"{noteInfoEntry.Name}\r\n{d.ToShortDateString()+" "+d.ToShortTimeString()}\r\n{noteInfoEntry.PageIndex}/{noteInfoEntry.PageCount}页";
             btn.TextAlign = ContentAlignment.MiddleLeft;
@@ -63,7 +77,7 @@ namespace SimplePenNote
             set { 
                 _selectedDir = value;
                 btnOpen.Enabled = value != null; 
-                btnOpenDir.Enabled = value != null; 
+                btnClone.Enabled = value != null; 
                 btnRename.Enabled = value != null; 
                 btnDelete.Enabled = value != null; 
             }
@@ -204,28 +218,26 @@ namespace SimplePenNote
 
         private void btnNew_Click(object sender, EventArgs e)
         {
-            
-            string name = "新的笔记";
-            int i = 0;
-            List<string> allNames = getAllNote().Select(l => l.entry.Name).Distinct().ToList();
-            while (allNames.Contains(name))
+            DlgNewNote dlgNewNote = new DlgNewNote();
+            dlgNewNote.NoteCreated += delegate
             {
-                i++;
-                name = "新的笔记" + " ("+i+")";
-            }
-            if (DlgInputBox.InputText(this,"创建新的笔记","笔记名称",ref name))
-            {
-                string dirname = Guid.NewGuid().ToString().Replace("-","");
-                dirname = Path.Combine(savesPath, dirname);
-                Directory.CreateDirectory(dirname);
-                NoteInfoEntry noteInfoEntry = new NoteInfoEntry();
-                noteInfoEntry.LastAccess = DateTime.Now.ToFileTime();
-                noteInfoEntry.Name = name;
-                File.WriteAllText(Path.Combine(dirname,"level.dat"),JsonConvert.Serialize(noteInfoEntry));
-                loadData();
-            }
+                openParticularNote(dlgNewNote.NewNotePath);
+            };
+            ShowOverlayWindow(dlgNewNote);
         }
-
+        private void btnClone_Click(object sender, EventArgs e)
+        {
+            DlgNewNote dlgNewNote = new DlgNewNote();
+            String metapath = Path.Combine(selectedDir, "level.dat");
+            NoteInfoEntry noteInfoEntry = JsonConvert.Deserialize<NoteInfoEntry>(File.ReadAllText(metapath));
+            dlgNewNote.copyFrom = selectedDir;
+            dlgNewNote.copyFromName = noteInfoEntry.Name;
+            dlgNewNote.NoteCreated += delegate
+            {
+                openParticularNote(dlgNewNote.NewNotePath);
+            };
+            ShowOverlayWindow(dlgNewNote);
+        }
         private void btnOpen_Click(object sender, EventArgs e)
         {
             if(selectedDir == null)
@@ -243,11 +255,11 @@ namespace SimplePenNote
             }
             String metapath = Path.Combine(selectedDir, "level.dat");
             NoteInfoEntry noteInfoEntry = JsonConvert.Deserialize<NoteInfoEntry>(File.ReadAllText(metapath));
-            if (DlgInputBox.InputText(this, "编辑笔记", "笔记名称", ref noteInfoEntry.Name))
-            {
-                File.WriteAllText(metapath, JsonConvert.Serialize(noteInfoEntry));
-                loadData();
-            }
+
+            DlgEditNote dlg = new DlgEditNote();
+            dlg.infoEntry = noteInfoEntry;
+            dlg.notesavePath = selectedDir;
+            ShowOverlayWindow(dlg);
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -260,9 +272,57 @@ namespace SimplePenNote
             }
         }
 
-        private void btnOpenDir_Click(object sender, EventArgs e)
+
+        private Form overlayForm = null;
+        private void ShowOverlayWindow(Form f)
         {
-            Process.Start(Path.GetFullPath(selectedDir));
+            overlayForm = f;
+            f.FormClosed += F_FormClosed;
+            f.Load += F_Load;
+            tblHeader.Visible = false;
+            tblFooter.Visible = false;
+            f.Show(this);
         }
+
+        private void F_Load(object sender, EventArgs e)
+        {
+            repositionOverlay();
+        }
+
+        private void repositionOverlay()
+        {
+            if(overlayForm != null)
+            {
+                overlayForm.WindowState = (this.WindowState != FormWindowState.Minimized) ? FormWindowState.Normal : FormWindowState.Minimized;
+                overlayForm.Location = tblNoteItems.PointToScreen(Point.Empty);
+                overlayForm.Size = tblNoteItems.Size;
+            }
+        }
+
+        private void F_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            overlayForm = null;
+            tblHeader.Visible = true;
+            tblFooter.Visible = true;
+            loadData();
+        }
+
+        private void FrmNoteManager_LocationChanged(object sender, EventArgs e)
+        {
+            if (overlayForm != null)
+            {
+                repositionOverlay();
+            }
+        }
+
+        private void FrmNoteManager_SizeChanged(object sender, EventArgs e)
+        {
+            if (overlayForm != null)
+            {
+                repositionOverlay();
+            }
+        }
+
+
     }
 }

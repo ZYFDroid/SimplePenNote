@@ -11,7 +11,7 @@
 
         <InkCanvas x:Name="canv" Width="2048" Height="2048" StylusOutOfRange="canv_StylusOutOfRange" StylusInRange="canv_StylusInRange" StylusSystemGesture="canv_StylusSystemGesture" TouchDown="canv_TouchDown" TouchMove="canv_TouchMove" TouchUp="canv_TouchUp" StylusButtonDown="canv_StylusButtonDown" StylusButtonUp="canv_StylusButtonUp" StylusDown="canv_StylusDown" StylusUp="canv_StylusUp" StrokeCollected="canv_StrokeCollected" StrokeErased="canv_StrokeErased" SelectionMoved="canv_SelectionMoved" SelectionResized="canv_SelectionResized" >
             <InkCanvas.Background>
-                <ImageBrush ImageSource="/noteline.png" Viewport="0,0,1,0.025" TileMode="Tile" Opacity="0.7"/>
+                <ImageBrush ImageSource="/Resources/noteline.png" Viewport="0,0,1,0.025" TileMode="Tile" />
             </InkCanvas.Background>
 
 

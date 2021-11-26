@@ -21,6 +21,7 @@ namespace SimplePenNote
         static void Main()
         {
             windowIcon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             
@@ -49,7 +50,7 @@ namespace SimplePenNote
         }
     }
 
-    class NoteInfoEntry {
+    public class NoteInfoEntry {
         public string Name = "新的笔记";
         public long LastAccess = new DateTime(2021,11,22).ToFileTime();
         public int PageCount = 1;
@@ -58,7 +59,7 @@ namespace SimplePenNote
         public double PaperHeight = -1;
     }
 
-    class JsonConvert {
+    public class JsonConvert {
         private static System.Web.Script.Serialization.JavaScriptSerializer serializer;
         public static string Serialize(object obj) {
             if (serializer == null) { serializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
@@ -71,7 +72,7 @@ namespace SimplePenNote
         }
     }
 
-    class MyButton: System.Windows.Forms.Button
+    public class MyButton: System.Windows.Forms.Button
     {
         public MyButton() : base()
         {
@@ -91,7 +92,7 @@ namespace SimplePenNote
             btn.FlatAppearance.BorderSize = 3;
         }
     }
-    class MyRadioButton : System.Windows.Forms.RadioButton
+    public class MyRadioButton : System.Windows.Forms.RadioButton
     {
         public MyRadioButton() : base()
         {

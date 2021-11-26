@@ -32,27 +32,27 @@
             this.tblNoteItems = new System.Windows.Forms.FlowLayoutPanel();
             this.sfDragger = new System.Windows.Forms.Panel();
             this.sfDragger2 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panelBottom = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel4 = new System.Windows.Forms.Panel();
+            this.tblFooter = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.btnOpenDir = new System.Windows.Forms.Button();
+            this.btnClone = new System.Windows.Forms.Button();
             this.btnRename = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
             this.btnOpen = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panelTop = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.tblHeader = new System.Windows.Forms.Panel();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel3.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.panelBottom.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.tblFooter.SuspendLayout();
+            this.panelTop.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.tblHeader.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel3
@@ -106,15 +106,14 @@
             this.sfDragger2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.sfDragger_MouseMove);
             this.sfDragger2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sfDragger_MouseUp);
             // 
-            // panel2
+            // panelBottom
             // 
-            this.panel2.BackgroundImage = global::SimplePenNote.Properties.Resources.banner_bottom;
-            this.panel2.Controls.Add(this.tableLayoutPanel2);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 415);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(902, 102);
-            this.panel2.TabIndex = 1;
+            this.panelBottom.Controls.Add(this.tableLayoutPanel2);
+            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelBottom.Location = new System.Drawing.Point(0, 415);
+            this.panelBottom.Name = "panelBottom";
+            this.panelBottom.Size = new System.Drawing.Size(902, 102);
+            this.panelBottom.TabIndex = 1;
             // 
             // tableLayoutPanel2
             // 
@@ -123,7 +122,7 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 600F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Controls.Add(this.panel4, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.tblFooter, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -133,19 +132,19 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(902, 102);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
-            // panel4
+            // tblFooter
             // 
-            this.panel4.Controls.Add(this.btnCancel);
-            this.panel4.Controls.Add(this.btnDelete);
-            this.panel4.Controls.Add(this.btnOpenDir);
-            this.panel4.Controls.Add(this.btnRename);
-            this.panel4.Controls.Add(this.btnNew);
-            this.panel4.Controls.Add(this.btnOpen);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(154, 3);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(594, 96);
-            this.panel4.TabIndex = 1;
+            this.tblFooter.Controls.Add(this.btnCancel);
+            this.tblFooter.Controls.Add(this.btnDelete);
+            this.tblFooter.Controls.Add(this.btnClone);
+            this.tblFooter.Controls.Add(this.btnRename);
+            this.tblFooter.Controls.Add(this.btnNew);
+            this.tblFooter.Controls.Add(this.btnOpen);
+            this.tblFooter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblFooter.Location = new System.Drawing.Point(154, 3);
+            this.tblFooter.Name = "tblFooter";
+            this.tblFooter.Size = new System.Drawing.Size(594, 96);
+            this.tblFooter.TabIndex = 1;
             // 
             // btnCancel
             // 
@@ -168,16 +167,16 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
-            // btnOpenDir
+            // btnClone
             // 
-            this.btnOpenDir.Enabled = false;
-            this.btnOpenDir.Location = new System.Drawing.Point(298, 57);
-            this.btnOpenDir.Name = "btnOpenDir";
-            this.btnOpenDir.Size = new System.Drawing.Size(124, 33);
-            this.btnOpenDir.TabIndex = 0;
-            this.btnOpenDir.Text = "打开存档目录";
-            this.btnOpenDir.UseVisualStyleBackColor = true;
-            this.btnOpenDir.Click += new System.EventHandler(this.btnOpenDir_Click);
+            this.btnClone.Enabled = false;
+            this.btnClone.Location = new System.Drawing.Point(298, 57);
+            this.btnClone.Name = "btnClone";
+            this.btnClone.Size = new System.Drawing.Size(124, 33);
+            this.btnClone.TabIndex = 0;
+            this.btnClone.Text = "重建";
+            this.btnClone.UseVisualStyleBackColor = true;
+            this.btnClone.Click += new System.EventHandler(this.btnClone_Click);
             // 
             // btnRename
             // 
@@ -211,15 +210,14 @@
             this.btnOpen.UseVisualStyleBackColor = true;
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
-            // panel1
+            // panelTop
             // 
-            this.panel1.BackgroundImage = global::SimplePenNote.Properties.Resources.banner;
-            this.panel1.Controls.Add(this.tableLayoutPanel1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(902, 79);
-            this.panel1.TabIndex = 0;
+            this.panelTop.Controls.Add(this.tableLayoutPanel1);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(902, 79);
+            this.panelTop.TabIndex = 0;
             // 
             // tableLayoutPanel1
             // 
@@ -228,7 +226,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 600F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.panel3, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tblHeader, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -238,19 +236,19 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(902, 79);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // panel3
+            // tblHeader
             // 
-            this.panel3.Controls.Add(this.txtSearch);
-            this.panel3.Controls.Add(this.label1);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(154, 3);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(594, 73);
-            this.panel3.TabIndex = 0;
+            this.tblHeader.Controls.Add(this.txtSearch);
+            this.tblHeader.Controls.Add(this.label1);
+            this.tblHeader.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblHeader.Location = new System.Drawing.Point(154, 3);
+            this.tblHeader.Name = "tblHeader";
+            this.tblHeader.Size = new System.Drawing.Size(594, 73);
+            this.tblHeader.TabIndex = 0;
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(127, 34);
+            this.txtSearch.Location = new System.Drawing.Point(127, 31);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(341, 26);
             this.txtSearch.TabIndex = 1;
@@ -258,12 +256,13 @@
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(3, 6);
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(588, 21);
+            this.label1.Size = new System.Drawing.Size(594, 31);
             this.label1.TabIndex = 0;
             this.label1.Text = "选择笔记";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // FrmNoteManager
             // 
@@ -272,36 +271,38 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(902, 517);
             this.Controls.Add(this.tableLayoutPanel3);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panelBottom);
+            this.Controls.Add(this.panelTop);
             this.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(918, 556);
             this.Name = "FrmNoteManager";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "笔记管理器 - 《因为嫌微软商店的笔记太难用所以自己写的笔记软件你会喜欢吗》";
             this.Load += new System.EventHandler(this.FrmNoteManager_Load);
+            this.LocationChanged += new System.EventHandler(this.FrmNoteManager_LocationChanged);
+            this.SizeChanged += new System.EventHandler(this.FrmNoteManager_SizeChanged);
             this.tableLayoutPanel3.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
+            this.panelBottom.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
-            this.panel4.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
+            this.tblFooter.ResumeLayout(false);
+            this.panelTop.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
+            this.tblHeader.ResumeLayout(false);
+            this.tblHeader.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.Panel panelBottom;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Panel tblHeader;
+        private System.Windows.Forms.Panel tblFooter;
         private System.Windows.Forms.FlowLayoutPanel tblNoteItems;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtSearch;
@@ -310,7 +311,7 @@
         private System.Windows.Forms.Button btnNew;
         private System.Windows.Forms.Button btnOpen;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Button btnOpenDir;
+        private System.Windows.Forms.Button btnClone;
         private System.Windows.Forms.Panel sfDragger;
         private System.Windows.Forms.Panel sfDragger2;
     }

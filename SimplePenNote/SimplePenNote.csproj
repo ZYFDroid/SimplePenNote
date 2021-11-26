@@ -38,6 +38,9 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -59,11 +62,17 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DlgInputBox.cs">
+    <Compile Include="DlgEditNote.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DlgInputBox.designer.cs">
-      <DependentUpon>DlgInputBox.cs</DependentUpon>
+    <Compile Include="DlgEditNote.Designer.cs">
+      <DependentUpon>DlgEditNote.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DlgNewNote.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DlgNewNote.Designer.cs">
+      <DependentUpon>DlgNewNote.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmNote.cs">
       <SubType>Form</SubType>
@@ -81,11 +90,15 @@
     <Compile Include="NoteControl.xaml.cs">
       <DependentUpon>NoteControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PdfBuildTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Toast.cs" />
-    <EmbeddedResource Include="DlgInputBox.resx">
-      <DependentUpon>DlgInputBox.cs</DependentUpon>
+    <EmbeddedResource Include="DlgEditNote.resx">
+      <DependentUpon>DlgEditNote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DlgNewNote.resx">
+      <DependentUpon>DlgNewNote.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmNote.resx">
       <DependentUpon>FrmNote.cs</DependentUpon>
@@ -103,6 +116,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -124,9 +138,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\noteline.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="noteline.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\script-medium.png" />

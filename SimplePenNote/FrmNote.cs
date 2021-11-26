@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Ink;
+using System.Windows.Media;
 
 namespace SimplePenNote
 {
@@ -472,4 +473,6 @@ namespace SimplePenNote
             DoSave();
         }
     }
+
+    
 }
